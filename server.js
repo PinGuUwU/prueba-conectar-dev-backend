@@ -29,17 +29,9 @@ const whitelist = [
 ];
 
 const corsOptions = {
-  origin: (origin, callback) => {
-    // !origin permite peticiones sin origen (como Postman o server-to-server)
-    if (whitelist.indexOf(origin) !== -1 || !origin) {
-      callback(null, true);
-    } else {
-      callback(new Error('Not allowed by CORS'));
-    }
-  },
+  origin: 'http://localhost:5173',
   methods: ['GET', 'POST', 'PUT', 'DELETE', 'OPTIONS', 'PATCH'],
   allowedHeaders: ['Content-Type', 'Authorization', 'X-Requested-With', 'Accept', 'Origin'],
-  credentials: false, // Esto requiere un origen específico (no '*')
   optionsSuccessStatus: 200
 };
 app.use(cors(corsOptions))
