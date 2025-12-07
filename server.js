@@ -22,43 +22,10 @@ const PORT = 8080;
 app.use(express.json());
 
 
-//Configuración para permitir solicitudes desde el frontend
-// Usamos el valor de la variable de entorno que sea más precisa.
-const NETLIFY_DOMAIN = "conectar-dev.netlify.app"; // Solo el dominio base
-const LOCAL_URL = "http://localhost:5173";
-
-const whitelist = [
-  LOCAL_URL,
-  `https://${NETLIFY_DOMAIN}`, // Versión HTTPS
-  `http://${NETLIFY_DOMAIN}`   // Versión HTTP (La necesaria) 
-];
-console.log("📋 Whitelist actual:", whitelist);
-
 const corsOptions = {
-  origin: (origin, callback) => {
-    // Si la solicitud no tiene un 'Origin' (ej. peticiones internas o Postman), la permitimos.
-    if (!origin) return callback(null, true);
-
-    // DEBUG: Loguear cada intento de conexión
-    console.log(`📡 CORS Request from origin: ${origin}`);
-
-    // Check directo para Netlify (evitar problemas de whitelist dinámica)
-    if (origin === 'https://conectar-dev.netlify.app' || origin === 'https://conectar-dev.netlify.app/') {
-      return callback(null, true);
-    }
-
-    if (whitelist.indexOf(origin) !== -1) {
-      callback(null, true);
-    } else {
-      console.error(`⛔ [BLOQUEO CRÍTICO] El origen '${origin}' NO está en la whitelist:`, whitelist);
-      // Cambiamos el mensaje de error para verificar si se está ejecutando el código nuevo
-      callback(new Error(`CORS BLOQUEADO (NUEVO): Origen '${origin}' no permitido.`));
-    }
-  },
+  origin: '*', // Permite solicitudes desde CUALQUIER dominio
+  methods: 'GET,HEAD,PUT,PATCH,POST,DELETE',
   credentials: true,
-  methods: ['GET', 'POST', 'PUT', 'DELETE', 'OPTIONS', 'PATCH'],
-  allowedHeaders: ['Content-Type', 'Authorization', 'X-Requested-With', 'Accept', 'Origin'],
-  optionsSuccessStatus: 200
 };
 app.use(cors(corsOptions))
 
