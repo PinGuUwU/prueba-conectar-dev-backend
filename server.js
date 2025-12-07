@@ -23,9 +23,16 @@ app.use(express.json());
 
 
 const corsOptions = {
-  origin: '*', // Permite solicitudes desde CUALQUIER dominio
-  methods: 'GET,HEAD,PUT,PATCH,POST,DELETE',
-  credentials: true,
+  // Para permitir credenciales (cookies) con cualquier origen, NO podemos usar '*'.
+  // Debemos devolver dinámicamente el origen que hace la petición.
+  origin: (origin, callback) => {
+    // Permitir cualquier origen (effectively allowing all) enviando 'true'
+    callback(null, true);
+  },
+  methods: ['GET', 'POST', 'PUT', 'DELETE', 'OPTIONS', 'PATCH'],
+  allowedHeaders: ['Content-Type', 'Authorization', 'X-Requested-With', 'Accept', 'Origin'],
+  credentials: true, // Esto requiere un origen específico (no '*')
+  optionsSuccessStatus: 200
 };
 app.use(cors(corsOptions))
 
