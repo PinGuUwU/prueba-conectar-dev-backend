@@ -51,21 +51,23 @@ const corsOptions = {
     }
   },
   credentials: true,
-};
+  methods: ['GET', 'POST', 'PUT', 'DELETE', 'OPTIONS', 'PATCH'],
+  allowedHeaders: ['Content-Type', 'Authorization', 'X-Requested-With', 'Accept', 'Origin'],
+  optionsSuccessStatus: 200
 app.use(cors(corsOptions))
 
 
 // Ruta básica para probar
 app.get('/', (req, res) => {
-  res.json({
-    message: '¡Hola! Tu servidor está funcionando 🎉',
-    fecha: new Date()
+    res.json({
+      message: '¡Hola! Tu servidor está funcionando 🎉',
+      fecha: new Date()
+    });
   });
-});
 
-// --- RUTAS ---
-//Ruta de usuarios
-app.use('/api/users/', userRoutes)
+  // --- RUTAS ---
+  //Ruta de usuarios
+  app.use('/api/users/', userRoutes)
 
 
 //Ruta de opiniones
@@ -89,11 +91,11 @@ app.use('/api/auth/linkedin', linkedinRouter)
 // Conexión a MongoDB (Se ejecutará en el "arranque en frío" de la función)
 mongoose
   .connect(MONGODB_URI)
-  .then(() => {
-    console.log("Conectado a MongoDB 🎉"); // <-- Descomenta esto temporalmente
-  })
-  .catch((err) => console.log("Error al conectar a MongoDB", err));
+    .then(() => {
+      console.log("Conectado a MongoDB 🎉"); // <-- Descomenta esto temporalmente
+    })
+    .catch((err) => console.log("Error al conectar a MongoDB", err));
 
-app.listen();
+  app.listen();
 
-export default app;
+  export default app;
