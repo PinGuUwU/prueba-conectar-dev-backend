@@ -25,7 +25,7 @@ app.use(express.json());
 //Configuración para permitir solicitudes desde el frontend
 const whitelist = [
   process.env.VITE_FRONTEND_URI || process.env.FRONTEND_URI,
-  process.env.FRONTEND_URI,
+  "http://localhost:5173/",
 ];
 const corsOptions = {
   origin: (origin, callback) => {
