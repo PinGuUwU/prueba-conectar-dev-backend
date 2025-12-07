@@ -48,12 +48,22 @@ console.log("📋 Whitelist actual:", whitelist);
 const corsOptions = {
   origin: (origin, callback) => {
     // Si la solicitud no tiene un 'Origin' (ej. peticiones internas o Postman), la permitimos.
-    if (whitelist.indexOf(origin) !== -1 || !origin) {
+    if (!origin) return callback(null, true);
+
+    // DEBUG: Loguear cada intento de conexión
+    console.log(`📡 CORS Request from origin: ${origin}`);
+
+    // Check directo para Netlify (evitar problemas de whitelist dinámica)
+    if (origin === 'https://conectar-dev.netlify.app' || origin === 'https://conectar-dev.netlify.app/') {
+      return callback(null, true);
+    }
+
+    if (whitelist.indexOf(origin) !== -1) {
       callback(null, true);
     } else {
-      console.error(`⛔ Bloqueado por CORS: La origen '${origin}' no está en la whitelist.`);
-      // Este error es el que estás viendo en los logs de Render
-      callback(new Error(`Not allowed by CORS: Origen ${origin}`));
+      console.error(`⛔ [BLOQUEO CRÍTICO] El origen '${origin}' NO está en la whitelist:`, whitelist);
+      // Cambiamos el mensaje de error para verificar si se está ejecutando el código nuevo
+      callback(new Error(`CORS BLOQUEADO (NUEVO): Origen '${origin}' no permitido.`));
     }
   },
   credentials: true,
