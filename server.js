@@ -24,16 +24,14 @@ app.use(express.json());
 
 //Configuración para permitir solicitudes desde el frontend
 // Usamos el valor de la variable de entorno que sea más precisa.
-const NETLIFY_URL = "https://conectar-dev.netlify.app";
+const NETLIFY_DOMAIN = "conectar-dev.netlify.app"; // Solo el dominio base
 const LOCAL_URL = "http://localhost:5173";
 
-// 2. Crear la lista blanca de dominios permitidos.
-// Inicializamos la lista con la URL local y, si la URL de producción existe, la añadimos.
 const whitelist = [
   LOCAL_URL,
-  NETLIFY_URL
+  `https://${NETLIFY_DOMAIN}`, // Versión HTTPS
+  `http://${NETLIFY_DOMAIN}`   // Versión HTTP (La necesaria) 
 ];
-
 console.log("📋 Whitelist actual:", whitelist);
 
 const corsOptions = {
