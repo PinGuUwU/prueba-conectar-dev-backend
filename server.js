@@ -24,24 +24,15 @@ app.use(express.json());
 
 //Configuración para permitir solicitudes desde el frontend
 // Usamos el valor de la variable de entorno que sea más precisa.
-const rawProdUrl = process.env.VITE_FRONTEND_URI || process.env.FRONTEND_URI;
-const FRONTEND_URL_PROD = rawProdUrl ? rawProdUrl.trim().replace(/^['"]|['"]$/g, "") : null;
-
-const LOCAL_URL = "http://localhost:5173"; // Aseguramos que NO tiene barra final
+const NETLIFY_URL = "https://conectar-dev.netlify.app";
+const LOCAL_URL = "http://localhost:5173";
 
 // 2. Crear la lista blanca de dominios permitidos.
 // Inicializamos la lista con la URL local y, si la URL de producción existe, la añadimos.
 const whitelist = [
-  LOCAL_URL
+  LOCAL_URL,
+  NETLIFY_URL
 ];
-
-if (FRONTEND_URL_PROD) {
-  const cleanProdUrl = FRONTEND_URL_PROD.replace(/\/$/, "");
-  whitelist.push(cleanProdUrl);
-  console.log("✅ URL de producción agregada a whitelist:", cleanProdUrl);
-} else {
-  console.error("⚠️  ADVERTENCIA: La variable FRONTEND_URI no está configurada o está vacía.");
-}
 
 console.log("📋 Whitelist actual:", whitelist);
 
