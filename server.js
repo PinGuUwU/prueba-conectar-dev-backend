@@ -36,7 +36,7 @@ app.use(cors({
   allowedHeaders: ['Content-Type', 'Authorization'],
 }));
 // Manejar preflight requests (OPTIONS)
-app.options('*', cors());
+// app.options('*', cors()); // Removed to fix PathError in Express 5
 
 
 // Ruta básica para probar
@@ -78,6 +78,8 @@ mongoose
   })
   .catch((err) => console.log("Error al conectar a MongoDB", err));
 
-app.listen();
+app.listen(PORT, () => {
+  console.log(`Server running on port ${PORT}`);
+});
 
 export default app;
