@@ -71,18 +71,16 @@ app.use('/api/technologies', technologyRoutes)
 //Ruta de autenticación LinkedIn
 app.use('/api/auth/linkedin', linkedinRouter)
 
-// Conectar a MongoDB
 // Conexión a MongoDB (Se ejecutará en el "arranque en frío" de la función)
 mongoose
   .connect(process.env.VITE_MONGODB_URI || MONGODB_URI)
   .then(() => {
-    // Es mejor no usar console.log en el entorno serverless de producción para mantenerlo limpio
-    // console.log("Conectado a MongoDB"); 
+    console.log("Conectado a MongoDB 🎉"); // <-- Descomenta esto temporalmente
   })
   .catch((err) => console.log("Error al conectar a MongoDB", err));
 
 app.listen(PORT, () => {
   console.log(`🚀 Servidor ejecutándose en http://localhost:${PORT}`);
-})
+});
 
 export default app;
