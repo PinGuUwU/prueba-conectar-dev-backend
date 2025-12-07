@@ -36,6 +36,7 @@ const whitelist = [
 if (FRONTEND_URL_PROD) {
   const cleanProdUrl = FRONTEND_URL_PROD.replace(/\/$/, "");
   whitelist.push(cleanProdUrl);
+  console.log(cleanProdUrl);
 } else {
   console.error("ADVERTENCIA: La variable FRONTEND_URI no está configurada en el entorno de Render.");
 }
