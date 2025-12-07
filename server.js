@@ -22,19 +22,7 @@ const PORT = 8080;
 app.use(express.json());
 
 
-const whitelist = [
-  'http://localhost:5173',
-  'https://conectar-dev.netlify.app',
-  // 'https://tu-sitio-en-produccion.vercel.app' // TODO: Agrega tu dominio de producción aquí
-];
-
-const corsOptions = {
-  origin: 'http://localhost:5173',
-  methods: ['GET', 'POST', 'PUT', 'DELETE', 'OPTIONS', 'PATCH'],
-  allowedHeaders: ['Content-Type', 'Authorization', 'X-Requested-With', 'Accept', 'Origin'],
-  optionsSuccessStatus: 200
-};
-app.use(cors(corsOptions))
+app.use(cors());
 
 
 // Ruta básica para probar
