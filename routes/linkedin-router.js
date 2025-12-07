@@ -25,8 +25,8 @@ const getEnv = () => ({
     CLIENT_ID: process.env.LINKEDIN_CLIENT_ID || process.env.VITE_LINKEDIN_CLIENT_ID,
     CLIENT_SECRET: process.env.LINKEDIN_CLIENT_SECRET || process.env.VITE_LINKEDIN_CLIENT_SECRET,
     REDIRECT_URI: process.env.LINKEDIN_REDIRECT_URI || process.env.VITE_LINKEDIN_REDIRECT_URI,
-    FRONTEND_FORM_URL: process.env.VITE_FRONTEND_FREELANCER_FORM_URL || 'http://localhost:5173/hacerse-freelancer',
-    JWT_SECRET: process.env.VITE_JWT_SECRET
+    FRONTEND_FORM_URL: process.env.VITE_FRONTEND_FREELANCER_FORM_URL || process.env.FRONTEND_FREELANCER_FORM_URL,
+    JWT_SECRET: process.env.VITE_JWT_SECRET || process.env.JWT_SECRET
 });
 
 // A. Inicio de la Vinculación
@@ -133,7 +133,7 @@ router.get('/callback', async (req, res) => {
         // 5. Redireccionar
         // El usuario pidió "redirigir al dashboard". 
         // Si tenemos una variable para el dashboard, la usamos. Si no, la raíz.
-        const dashboardUrl = process.env.VITE_FRONTEND_PROFILE_URL || 'http://localhost:5173/dashboard';
+        const dashboardUrl = process.env.VITE_FRONTEND_PROFILE_URL || process.env.FRONTEND_PROFILE_URL;
         res.redirect(dashboardUrl);
 
     } catch (error) {

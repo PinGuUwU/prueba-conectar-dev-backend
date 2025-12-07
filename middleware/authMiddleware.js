@@ -17,7 +17,7 @@ export const protect = async (req, res, next) => {
 
       // 3. Verificar el token usando el secreto
       // Asegúrate de que process.env.VITE_JWT_SECRET está configurado
-      const decoded = jwt.verify(token, process.env.VITE_JWT_SECRET);
+      const decoded = jwt.verify(token, process.env.VITE_JWT_SECRET || process.env.JWT_SECRET);
 
       // 4. Buscar el usuario asociado al ID dentro del token (sin el password)
       req.user = await buscarUsuarioSinPassword(decoded);

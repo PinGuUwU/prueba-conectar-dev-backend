@@ -14,19 +14,30 @@ import cors from 'cors'
 
 // Crear la aplicación de Express
 const app = express();
-const MONGODB_URI = process.env.VITE_MONGODB_URI
+const MONGODB_URI = process.env.VITE_MONGODB_URI || process.env.MONGODB_URI
 const PORT = 8080;
 
 
 // Middleware para manejar JSON
 app.use(express.json());
 
+
 //Configuración para permitir solicitudes desde el frontend
-app.use(cors({
-  origin: process.env.VITE_FRONTEND_URI,
-  methods: 'GET, HEAD, PUT, PATCH, POST, DELETE',
-  credentials: true,
-}))
+const whitelist = [
+  process.env.VITE_FRONTEND_URI || process.env.FRONTEND_URI,
+  process.env.FRONTEND_URI,
+];
+const corsOptions = {
+  origin: (origin, callback) => {
+    if (whitelist.indexOf(origin) !== -1 || !origin) {
+      callback(null, true);
+    } else {
+      callback(new Error('Not allowed by CORS'));
+    }
+  },
+  credentials: true, // Importante para cookies/sesiones si las usas
+};
+app.use(cors(corsOptions))
 
 
 // Ruta básica para probar

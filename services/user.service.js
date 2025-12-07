@@ -72,7 +72,7 @@ const hashearPassword = async (password, saltRounds) => {
 // --- Función Auxiliar para Generar JWT ---
 // Usa el JWT_SECRET que debes poner en tu .env
 const generateToken = (id) => {
-    return jwt.sign({ id }, process.env.VITE_JWT_SECRET, {
+    return jwt.sign({ id }, process.env.VITE_JWT_SECRET || process.env.JWT_SECRET, {
         expiresIn: '1d', // El token es válido por 1 día
     });
 };
