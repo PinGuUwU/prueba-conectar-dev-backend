@@ -23,10 +23,22 @@ app.use(express.json());
 
 
 //Configuración para permitir solicitudes desde el frontend
+// Usamos el valor de la variable de entorno que sea más precisa.
+const FRONTEND_URL_PROD = process.env.VITE_FRONTEND_URI || process.env.FRONTEND_URI;
+const LOCAL_URL = "http://localhost:5173"; // Aseguramos que NO tiene barra final
+
+// 2. Crear la lista blanca de dominios permitidos.
+// Inicializamos la lista con la URL local y, si la URL de producción existe, la añadimos.
 const whitelist = [
-  process.env.VITE_FRONTEND_URI || process.env.FRONTEND_URI,
-  "http://localhost:5173/",
+  LOCAL_URL
 ];
+
+if (FRONTEND_URL_PROD) {
+  const cleanProdUrl = FRONTEND_URL_PROD.replace(/\/$/, "");
+  whitelist.push(cleanProdUrl);
+} else {
+  console.error("ADVERTENCIA: La variable FRONTEND_URI no está configurada en el entorno de Render.");
+}
 const corsOptions = {
   origin: (origin, callback) => {
     if (whitelist.indexOf(origin) !== -1 || !origin) {
