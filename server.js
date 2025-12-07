@@ -24,7 +24,9 @@ app.use(express.json());
 
 //Configuración para permitir solicitudes desde el frontend
 // Usamos el valor de la variable de entorno que sea más precisa.
-const FRONTEND_URL_PROD = process.env.VITE_FRONTEND_URI || process.env.FRONTEND_URI;
+const rawProdUrl = process.env.VITE_FRONTEND_URI || process.env.FRONTEND_URI;
+const FRONTEND_URL_PROD = rawProdUrl ? rawProdUrl.trim().replace(/^['"]|['"]$/g, "") : null;
+
 const LOCAL_URL = "http://localhost:5173"; // Aseguramos que NO tiene barra final
 
 // 2. Crear la lista blanca de dominios permitidos.
@@ -36,16 +38,20 @@ const whitelist = [
 if (FRONTEND_URL_PROD) {
   const cleanProdUrl = FRONTEND_URL_PROD.replace(/\/$/, "");
   whitelist.push(cleanProdUrl);
-  console.log(cleanProdUrl);
+  console.log("✅ URL de producción agregada a whitelist:", cleanProdUrl);
 } else {
-  console.error("ADVERTENCIA: La variable FRONTEND_URI no está configurada en el entorno de Render.");
+  console.error("⚠️  ADVERTENCIA: La variable FRONTEND_URI no está configurada o está vacía.");
 }
+
+console.log("📋 Whitelist actual:", whitelist);
+
 const corsOptions = {
   origin: (origin, callback) => {
     // Si la solicitud no tiene un 'Origin' (ej. peticiones internas o Postman), la permitimos.
     if (whitelist.indexOf(origin) !== -1 || !origin) {
       callback(null, true);
     } else {
+      console.error(`⛔ Bloqueado por CORS: La origen '${origin}' no está en la whitelist.`);
       // Este error es el que estás viendo en los logs de Render
       callback(new Error(`Not allowed by CORS: Origen ${origin}`));
     }
