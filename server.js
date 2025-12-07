@@ -41,13 +41,15 @@ if (FRONTEND_URL_PROD) {
 }
 const corsOptions = {
   origin: (origin, callback) => {
+    // Si la solicitud no tiene un 'Origin' (ej. peticiones internas o Postman), la permitimos.
     if (whitelist.indexOf(origin) !== -1 || !origin) {
       callback(null, true);
     } else {
-      callback(new Error('Not allowed by CORS'));
+      // Este error es el que estás viendo en los logs de Render
+      callback(new Error(`Not allowed by CORS: Origen ${origin}`));
     }
   },
-  credentials: true, // Importante para cookies/sesiones si las usas
+  credentials: true,
 };
 app.use(cors(corsOptions))
 
